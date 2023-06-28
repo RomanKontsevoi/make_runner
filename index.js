@@ -1,6 +1,6 @@
 import express from 'express'
 import { config } from 'dotenv'
-import { spawn } from 'child_process'
+import { exec } from 'child_process'
 
 config()
 
@@ -15,23 +15,26 @@ try {
   })
 
   app.post('/hook', (req, res) => {
-    const ls = spawn('sh', [ `${targetFolder}/redeploy.sh` ])
+    process.chdir(targetFolder);
 
-    ls.stdout.on('data', (data) => {
-      console.log(`stdout: ${data}`)
-    })
+// Выполнение файла redeploy.sh
+    const command = './redeploy.sh';
+    const child = exec(command);
 
-    ls.stderr.on('data', (data) => {
-      console.error(`stderr: ${data}`)
-    })
+// Вывод логов в режиме реального времени
+    child.stdout.on('data', (data) => {
+      console.log(data);
+    });
 
-    ls.on('close', (code) => {
-      console.log(`child process exited with code ${code}`)
-    })
+    child.stderr.on('data', (data) => {
+      console.error(data);
+    });
 
-    ls.on('error', (err) => {
-      console.error(err)
-    })
+    child.on('close', (code) => {
+      const message = `[server]: Child process exited with code ${code}`
+      console.log(message);
+      res.send(message)
+    });
   })
 
   app.listen(port, () => {
