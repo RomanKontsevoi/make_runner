@@ -14,7 +14,7 @@ try {
     res.send('Express + TypeScript Server')
   })
 
-  app.post('/hook', (req, res) => {
+  app.post('/hook/mern-blog-be', (req, res) => {
     process.chdir(targetFolder);
 
 // Выполнение файла redeploy.sh
