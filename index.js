@@ -25,11 +25,34 @@ try {
   app.post('/hook/mern-blog-be/github', (req, res) => {
     process.chdir(mirrorFolder)
 
-// Выполнение файла redeploy.sh
+    // Выполнение файла redeploy.sh
     const command = './redeploy.sh'
     const child = exec(command)
 
-// Вывод логов в режиме реального времени
+    // Вывод логов в режиме реального времени
+    child.stdout.on('data', (data) => {
+      console.log(data)
+    })
+
+    child.stderr.on('data', (data) => {
+      console.error(data)
+    })
+
+    child.on('close', (code) => {
+      const message = `[server]: Child process exited with code ${code}`
+      console.log(message)
+      res.send(message)
+    })
+  })
+
+  app.post('/hook/mern-blog-be/docker_hub', (req, res) => {
+    process.chdir(mirrorFolder)
+
+    // Выполнение файла update_container.sh
+    const command = './update_container.sh'
+    const child = exec(command)
+
+    // Вывод логов в режиме реального времени
     child.stdout.on('data', (data) => {
       console.log(data)
     })
