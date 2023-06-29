@@ -1,5 +1,5 @@
 # Используем официальный образ Node.js в качестве базового образа
-FROM node:18.16.0
+FROM node:18.16.1
 
 # Устанавливаем директорию приложения в контейнере
 WORKDIR /app
@@ -7,7 +7,8 @@ WORKDIR /app
 COPY package.json .
 
 # runs once when image is building
-RUN npm install
+RUN apt-get update && apt-get install -y docker.io make && \
+    npm install
 
 # copy all files from the root folder of project
 # to the root (or WORKDIR) folder of the image
