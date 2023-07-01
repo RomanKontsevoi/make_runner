@@ -5,7 +5,7 @@ PORT = 3020
 export $(shell sed 's/=.*//' .env)
 
 build:
-	docker build -t $(IMAGE_NAME) .  --network host | tee error.log
+	docker build --progress=plain -t $(IMAGE_NAME) .  --network host | tee error.log
 
 run:
 	docker run -d -p $(PORT):$(PORT) -v $(TARGET_FOLDER):/app/target -v logs:/app/data --rm \
