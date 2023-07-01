@@ -5,10 +5,10 @@ PORT = 3020
 export $(shell sed 's/=.*//' .env)
 
 build:
-	docker build --progress=plain -t $(IMAGE_NAME) .  --network host | tee error.log
+	docker build -t $(IMAGE_NAME) .  --network host | tee error.log
 
 run:
-	docker run -d -p $(PORT):$(PORT) -v $(TARGET_FOLDER):/app/target -v logs:/app/data --rm \
+	docker run -d -p $(PORT):$(PORT) -v $(TARGET_FOLDER):/app/target -v logs:/app/data \
 	-v /var/run/docker.sock:/var/run/docker.sock --name $(CONTAINER_NAME) $(IMAGE_NAME)
 
 stop:

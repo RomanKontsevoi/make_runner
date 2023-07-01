@@ -7,9 +7,7 @@ WORKDIR /app
 COPY package.json .
 
 # runs once when image is building
-RUN apt-get update && apt-get install -y docker.io make
-RUN yarn
-RUN yarn build
+RUN apt-get update && apt-get install -y docker.io make && yarn
 
 # copy all files from the root folder of project
 # to the root (or WORKDIR) folder of the image
